@@ -1,11 +1,15 @@
 const express=require('express')
 const app=express()
-const port=4000
+require('dotenv').config();
 
-app.get('/',(req,res)=>{
-    res.send("hello")
-})
+console.log(process.env.MONGODB_URI)
 
-app.listen(port,()=>{
-    console.log(`server listening port: ${port}`)
+const initMongoDB=require('./package/mongodb/initDB')
+initMongoDB.initMongoDB()
+const initRouter=require('./router/init')
+
+initRouter.Init(app)
+
+app.listen(process.env.PORT,()=>{
+    console.log(`server listening port: ${process.env.PORT}`)
 })
