@@ -1,11 +1,14 @@
 const express=require('express')
 const app=express()
+const bodyParser=require('body-parser')
 require('dotenv').config();
-
-console.log(process.env.MONGODB_URI)
 
 const initMongoDB=require('./package/mongodb/initDB')
 initMongoDB.initMongoDB()
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 const initRouter=require('./router/init')
 
 initRouter.Init(app)
