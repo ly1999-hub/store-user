@@ -1,9 +1,8 @@
 const express=require('express')
 const Router=express.Router()
 const controllerAdmin=require('../controller/admin')
-Router.post('',controllerAdmin.CreateAdmin)
-Router.get("",function(req,res){
-    res.status(200).send("ok")
-})
+
+const validate=require('../validation/admin')
+Router.post('',validate.validateRegisterCustomer(),controllerAdmin.CheckExistByEmail,controllerAdmin.CreateAdmin)
 
 module.exports=Router;
