@@ -4,7 +4,7 @@ const timeHandler=require('../log/time/timeHandler')
 
 var {validationResult} = require('express-validator');
 
-var checkRoot=async ()=>{
+const checkRoot=async ()=>{
     var root=await Admin.findOne({root:"true"}).exec()
     if(root==null){
         const id=initObjectID.initID()
@@ -68,3 +68,25 @@ module.exports.CheckExistByEmail=async (req,res,next)=>{
     }
     next()
 }
+
+module.exports.LoginByEmail=async(req,res,next)=>{
+    var login=req.body
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).send(errors)
+    }
+
+    await Admin.findOne({email:login.email}).then(user=>{
+        if(user.password==login.password){
+            res.status(200).json("ok")
+        }else{
+            res.status(400).json("error pass")
+        }
+    }).catch(error=>{
+        res.status(500).json("error")
+    })
+}
+
+
+
