@@ -1,4 +1,5 @@
 const {check} = require('express-validator');
+var {validationResult} = require('express-validator');
 
 let validateRegisterCustomer = ()=> {
   return [ 
@@ -19,9 +20,19 @@ let validationLoginByEmail=()=>{
   ]
 }
 
+const CheckValidation=(req,res,next)=>{
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).send(errors)
+    }else{
+      next()
+    }
+}
+
 let validate={
     validateRegisterCustomer:validateRegisterCustomer,
-    validationLoginByEmail:validationLoginByEmail
+    validationLoginByEmail:validationLoginByEmail,
+    CheckValidation:CheckValidation
 }
 
 module.exports=validate
