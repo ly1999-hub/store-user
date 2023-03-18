@@ -11,9 +11,17 @@ let validateRegisterCustomer = ()=> {
   ]; 
 }
 
+let validationLoginByEmail=()=>{
+  return [
+    check('email', 'email does not Empty').not().isEmpty(),
+    check('email', 'Invalid email').isEmail(),
+    check('password','password does not Empty').not().isEmpty(),
+  ]
+}
 
 let validate={
-    validateRegisterCustomer:validateRegisterCustomer
+    validateRegisterCustomer:validateRegisterCustomer,
+    validationLoginByEmail:validationLoginByEmail
 }
 
 module.exports=validate
