@@ -10,6 +10,7 @@ Router.post('',validate.validateRegisterCustomer(),validate.CheckValidation,chec
 Router.post('/login',validate.validationLoginByEmail(),controllerAdmin.LoginByEmail)
 Router.get('/all',checkLogin.CheckToken,controllerAdmin.All)
 Router.get('/:id',checkLogin.CheckToken,controllerAdmin.Detail)
-Router.put('change-status',checkLogin.CheckToken)
+Router.put('/change-status',checkLogin.CheckToken)
+Router.post('/forget-password',controllerAdmin.ForgetPassword)
 
 module.exports=Router;

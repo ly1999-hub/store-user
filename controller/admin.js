@@ -6,6 +6,7 @@ const initObjectID=require('../log/mongodb/initObjectID')
 const timeHandler=require('../log/time/timeHandler')
 const crypt=require('../utils/crypt')
 const promissions=require('../log/const/Permissions')
+const SendMail=require('../utils/sendEmail')
 
 module.exports.CheckRoot=async ()=>{
     var root=await Admin.findOne({root:"true"}).exec()
@@ -57,19 +58,8 @@ module.exports.Create=async (req,res,next)=>{
 
     })
     await Admin.create(newAdmin)
-
+    SendMail.SendEMail("vodinhhiepfpoly@gmail.com","test","<p>Hello world!</p>")
     res.status(200).json("ok")
-}
-
-//
-module.exports.CheckExistByEmail=async (req,res,next)=>{
-    const email=req.body.email
-
-    var admin=await Admin.findOne({email:email})
-    if(admin){
-        res.send('email exist')
-    }
-    next()
 }
 
 // LoginByEmail ...
@@ -114,3 +104,22 @@ module.exports.Detail=async (req,res,next)=>{
     })
 }
 
+module.exports.ForgetPassword=async (req,res,next)=>{
+    const email=req.body.email
+    
+    var admin=await Admin.findOne({email:email})
+    if(admin){
+
+        const result = Math.random().toString(36).substring(2,7);
+        await Admin.updateOne({email:email},{password:crypt.EncryptPassword(result)}).then(()=>{
+            SendMail.SendEMail(email,"nhly123123456789@gmail.com","ResetPassword",`<p>${result}</p>`)
+            res.status(200).json(result)
+        })
+        .catch(error=>{
+            console.log("Error update One forget Password" + error)
+        })
+        
+    }else{
+        res.status(200).json("don`t have exist email")
+    }
+}
